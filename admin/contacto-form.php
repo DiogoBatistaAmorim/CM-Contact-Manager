@@ -102,7 +102,7 @@ function cm_contact_add_page() {
             <tr>
                 <th><label for="country_code">País</label></th>
                 <td>
-                    <select name="country_code" id="country_code" required>
+                    <select name="country_code" id="country_code" style="min-width:300px;" required>
                         <option value="">-- Carregar países... --</option>
                     </select>
                 </td>
@@ -134,6 +134,15 @@ function cm_contact_add_page() {
                         select.appendChild(option);
                     }
                 });
+
+                // Ativar Select2 depois de carregar as opções
+                jQuery(function($){
+                    $('#country_code').select2({
+                        placeholder: "-- Selecionar País --",
+                        allowClear: true,
+                        width: 'resolve'
+                    });
+                });
             })
             .catch(err => console.error("Erro ao carregar países:", err));
     });
@@ -141,3 +150,10 @@ function cm_contact_add_page() {
     <?php
     echo '</div>';
 }
+
+add_action('admin_enqueue_scripts', function($hook) {
+    if (strpos($hook, 'cm_contact_add') !== false) {
+        wp_enqueue_style('select2');
+        wp_enqueue_script('select2');
+    }
+});
