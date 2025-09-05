@@ -112,4 +112,7 @@ add_action('admin_menu', function() {
     );
 });
 
+// Lista para página publica
+require_once plugin_dir_path(__FILE__) . 'public-people.php';
+
 

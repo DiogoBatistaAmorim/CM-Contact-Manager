@@ -3,16 +3,16 @@ if (!defined('ABSPATH')) exit;
 
 function cm_public_people_shortcode($atts) {
     global $wpdb;
-    $pessoas_table = $wpdb->prefix . 'cm_pessoas';
+    $pessoas_table  = $wpdb->prefix . 'cm_pessoas';
     $contactos_table = $wpdb->prefix . 'cm_contactos';
 
-    // Filtros
-    $filter_name = isset($_GET['filter_name']) ? sanitize_text_field($_GET['filter_name']) : '';
-    $filter_email = isset($_GET['filter_email']) ? sanitize_text_field($_GET['filter_email']) : '';
+    // Capturar filtros do GET
+    $filter_name   = isset($_GET['filter_name']) ? sanitize_text_field($_GET['filter_name']) : '';
+    $filter_email  = isset($_GET['filter_email']) ? sanitize_text_field($_GET['filter_email']) : '';
     $filter_number = isset($_GET['filter_number']) ? sanitize_text_field($_GET['filter_number']) : '';
 
-    // Query base
-    $query = "SELECT * FROM {$pessoas_table} WHERE deleted_at IS NULL";
+    // Construir query base
+    $query = "SELECT * FROM $pessoas_table WHERE deleted_at IS NULL";
     $params = [];
     $formats = [];
 
@@ -26,15 +26,13 @@ function cm_public_people_shortcode($atts) {
         $params[] = '%' . $wpdb->esc_like($filter_email) . '%';
         $formats[] = '%s';
     }
-    $query .= " ORDER BY id DESC";
 
-    // Executa query
+    $query .= " ORDER BY id DESC";
     $pessoas = $params ? $wpdb->get_results($wpdb->prepare($query, ...$params)) : $wpdb->get_results($query);
 
-    ob_start();
+    ob_start(); // Começar buffer para retornar conteúdo
     ?>
     <form method="get" style="margin-bottom:20px;">
-        <input type="hidden" name="page_id" value="<?php echo get_the_ID(); ?>">
         <input type="text" name="filter_name" placeholder="Filtrar por nome" value="<?php echo esc_attr($filter_name); ?>">
         <input type="text" name="filter_email" placeholder="Filtrar por email" value="<?php echo esc_attr($filter_email); ?>">
         <input type="text" name="filter_number" placeholder="Filtrar por número" value="<?php echo esc_attr($filter_number); ?>">
@@ -42,7 +40,7 @@ function cm_public_people_shortcode($atts) {
     </form>
 
     <?php if ($pessoas) : ?>
-        <table style="width:100%;border-collapse:collapse;">
+        <table style="width:100%; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -54,15 +52,12 @@ function cm_public_people_shortcode($atts) {
             </thead>
             <tbody>
             <?php foreach ($pessoas as $p) :
-                // Puxar contactos da pessoa
                 $contacts_query = "SELECT * FROM {$contactos_table} WHERE person_id = %d";
                 $contacts = $wpdb->get_results($wpdb->prepare($contacts_query, $p->id));
 
-                // Filtrar contactos se filtro de número preenchido
+                // Filtrar por número se houver filtro
                 if ($filter_number) {
-                    $contacts = array_filter($contacts, function($c) use ($filter_number) {
-                        return strpos($c->number, $filter_number) !== false;
-                    });
+                    $contacts = array_filter($contacts, fn($c) => strpos($c->number, $filter_number) !== false);
                 }
                 ?>
                 <tr>
@@ -70,7 +65,7 @@ function cm_public_people_shortcode($atts) {
                     <td>
                         <?php if (!empty($p->avatar_svg)) : ?>
                             <div style="width:40px;height:40px;"><?php echo $p->avatar_svg; ?></div>
-                        <?php else : ?>
+                        <?php else: ?>
                             <span style="color:#aaa;">Sem avatar</span>
                         <?php endif; ?>
                     </td>
@@ -95,6 +90,6 @@ function cm_public_people_shortcode($atts) {
         <p>Nenhuma pessoa encontrada.</p>
     <?php endif;
 
-    return ob_get_clean();
+    return ob_get_clean(); // Retornar conteúdo para o shortcode
 }
 add_shortcode('cm_public_people', 'cm_public_people_shortcode');
