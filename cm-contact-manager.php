@@ -2,7 +2,7 @@
 /**
  * Plugin Name: CM — Contact Manager
  * Description: Plugin para gerir Pessoas e Contactos (teste).
- * Version: 1.0.6
+ * Version: 1.0.8
  * Author: Diogo Amorim
  */
 

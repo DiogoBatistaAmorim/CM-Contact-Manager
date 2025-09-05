@@ -31,21 +31,32 @@ if (!function_exists('cm_people_page')) {
 
         if ($pessoas) {
             echo '<table class="wp-list-table widefat fixed striped">';
-            echo '<thead><tr><th>ID</th><th>Avatar</th><th>Nome</th><th>Email</th><th>Ações</th></tr></thead><tbody>';
+            echo '<thead>
+                    <tr>
+                        <th width="50">ID</th>
+                        <th width="100" style="text-align:center;">Avatar</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th width="250">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>';
 
             foreach ($pessoas as $p) {
-                $edit_url        = admin_url('admin.php?page=cm_person_add&id=' . $p->id);
-                $delete_url      = wp_nonce_url(admin_url('admin.php?page=cm_people&delete=' . $p->id), 'cm_delete_person');
-                $contact_add_url = admin_url('admin.php?page=cm_contact_add&person_id=' . $p->id);
-                $contact_list_url= admin_url('admin.php?page=cm_contact_list&person_id=' . $p->id);
+                $edit_url         = admin_url('admin.php?page=cm_person_add&id=' . $p->id);
+                $delete_url       = wp_nonce_url(admin_url('admin.php?page=cm_people&delete=' . $p->id), 'cm_delete_person');
+                $contact_add_url  = admin_url('admin.php?page=cm_contact_add&person_id=' . $p->id);
+                $contact_list_url = admin_url('admin.php?page=cm_contact_list&person_id=' . $p->id);
 
                 echo '<tr>';
-                echo '<td>' . $p->id . '</td>';
+                echo '<td>' . intval($p->id) . '</td>';
 
                 // Avatar (se existir)
-                echo '<td>';
+                echo '<td style="text-align:center;">';
                 if (!empty($p->avatar_svg)) {
-                    echo '<div style="width:40px;height:40px;">' . $p->avatar_svg . '</div>';
+                    echo '<div style="width:80px;height:80px;overflow:hidden;border-radius:50%;border:1px solid #ddd;margin:auto;display:flex;align-items:center;justify-content:center;">' 
+                        . $p->avatar_svg . 
+                        '</div>';
                 } else {
                     echo '<span style="color:#aaa;">Sem avatar</span>';
                 }
