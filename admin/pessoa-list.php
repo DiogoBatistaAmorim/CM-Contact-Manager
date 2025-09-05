@@ -34,14 +34,15 @@ if (!function_exists('cm_people_page')) {
             echo '<thead><tr><th>ID</th><th>Avatar</th><th>Nome</th><th>Email</th><th>Ações</th></tr></thead><tbody>';
 
             foreach ($pessoas as $p) {
-                $edit_url   = admin_url('admin.php?page=cm_person_add&id=' . $p->id);
-                $delete_url = wp_nonce_url(admin_url('admin.php?page=cm_people&delete=' . $p->id), 'cm_delete_person');
-                $contact_url = admin_url('admin.php?page=cm_contact_add&person_id=' . $p->id);
+                $edit_url        = admin_url('admin.php?page=cm_person_add&id=' . $p->id);
+                $delete_url      = wp_nonce_url(admin_url('admin.php?page=cm_people&delete=' . $p->id), 'cm_delete_person');
+                $contact_add_url = admin_url('admin.php?page=cm_contact_add&person_id=' . $p->id);
+                $contact_list_url= admin_url('admin.php?page=cm_contact_list&person_id=' . $p->id);
 
                 echo '<tr>';
                 echo '<td>' . $p->id . '</td>';
 
-                // Avatar(se existir)
+                // Avatar (se existir)
                 echo '<td>';
                 if (!empty($p->avatar_svg)) {
                     echo '<div style="width:40px;height:40px;">' . $p->avatar_svg . '</div>';
@@ -52,11 +53,15 @@ if (!function_exists('cm_people_page')) {
 
                 echo '<td>' . esc_html($p->name) . '</td>';
                 echo '<td>' . esc_html($p->email) . '</td>';
+
+                // Coluna de ações
                 echo '<td>';
                 echo '<a href="' . $edit_url . '">Editar</a> | ';
-                echo '<a href="' . $contact_url . '">Adicionar Contacto</a> | ';
+                echo '<a href="' . $contact_add_url . '">Adicionar Contacto</a> | ';
+                echo '<a href="' . $contact_list_url . '">Ver Contactos</a> | ';
                 echo '<a href="' . $delete_url . '" onclick="return confirm(\'Tem certeza que deseja apagar esta pessoa?\')">Apagar</a>';
                 echo '</td>';
+
                 echo '</tr>';
             }
 

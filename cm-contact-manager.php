@@ -98,5 +98,18 @@ add_action('admin_menu', function() {
         'cm_contact_add_page'  // Callback
     );
 });
+ // Lista de contactos
+require_once plugin_dir_path(__FILE__) . 'admin/contacto-list.php';
+
+add_action('admin_menu', function() {
+    add_submenu_page(
+        'cm_people',              // Parent slug
+        'Lista de Contactos',     // Page title
+        'Lista de Contactos',     // Menu title
+        'manage_options',         // Capability necessária
+        'cm_contact_list',        // Menu slug
+        'cm_contact_list_page'    // Callback 
+    );
+});
 
 
