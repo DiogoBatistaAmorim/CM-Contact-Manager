@@ -2,7 +2,7 @@
 /**
  * Plugin Name: CM — Contact Manager
  * Description: Plugin para gerir Pessoas e Contactos (teste).
- * Version: 1.0.1
+ * Version: 1.0.5
  * Author: Diogo Amorim
  */
 
@@ -69,10 +69,11 @@ add_action('admin_menu', function () {
     );
 });
 
-// Adiciona o form dos dados da pessoa
+// Adiciona o form para introduzir os dados da pessoa e a lista de todos os dados das pessoas
 require_once plugin_dir_path(__FILE__) . 'admin/pessoa-form.php';
+require_once plugin_dir_path(__FILE__) . 'admin/pessoa-list.php';
 
-// Adiciona submenu Nova Pessoa
+// Adiciona menu Nova Pessoa
 add_action('admin_menu', function() {
     add_submenu_page(
         'cm_people',             // Parent slug
@@ -84,12 +85,3 @@ add_action('admin_menu', function() {
     );
 });
 
-/**
- * Função de callback da página principal
- */
-function cm_people_page() {
-    echo '<div class="wrap">';
-    echo '<h1>Contact Management</h1>';
-    echo '<p>As tabelas <code>pessoas</code> e <code>contactos</code> foram ter sido criadas na base de dados <strong>wp-diogoamorim</strong>.</p>';
-    echo '</div>';
-}
