@@ -28,7 +28,7 @@ function cm_activate_plugin() {
     // Tabela de pessoas
     $sql1 = "CREATE TABLE $pessoas (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        name VARCHAR(50) NOT NULL,
+        name VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         avatar_svg LONGTEXT NULL,
         deleted_at DATETIME NULL,
@@ -55,7 +55,7 @@ function cm_activate_plugin() {
 }
 
 /**
- * Passo 1: Criar menu no admin
+ *Criar menu no admin
  */
 add_action('admin_menu', function () {
     add_menu_page(
@@ -69,12 +69,27 @@ add_action('admin_menu', function () {
     );
 });
 
+// Adiciona o form dos dados da pessoa
+require_once plugin_dir_path(__FILE__) . 'admin/pessoa-form.php';
+
+// Adiciona submenu Nova Pessoa
+add_action('admin_menu', function() {
+    add_submenu_page(
+        'cm_people',             // Parent slug
+        'Nova Pessoa',           // Page title
+        'Nova Pessoa',           // Menu title
+        'manage_options',        // Capability
+        'cm_person_add',         // Menu slug
+        'cm_person_add_page'     // Callback
+    );
+});
+
 /**
  * Função de callback da página principal
  */
 function cm_people_page() {
     echo '<div class="wrap">';
     echo '<h1>Contact Management</h1>';
-    echo '<p>As tabelas <code>cm_persons</code> e <code>cm_contacts</code> devem ter sido criadas na base de dados <strong>wp-diogoamorim</strong>.</p>';
+    echo '<p>As tabelas <code>pessoas</code> e <code>contactos</code> foram ter sido criadas na base de dados <strong>wp-diogoamorim</strong>.</p>';
     echo '</div>';
 }
